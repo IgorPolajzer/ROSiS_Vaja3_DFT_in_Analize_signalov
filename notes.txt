@@ -1,0 +1,13 @@
+BPF = n ⋅ t / 60                         (1)
+where
+BPF = Blade Pass Frequency (Hz)
+n = rotation velocity (rpm)
+t = number of blades
+
+Example - Blade Pass Frequency of Fan
+If a fan with 10 blades rotates with 2400 rpm - the Blade Pass Frequency - BPF - can be calculated
+
+BPF = (2400 rpm) ⋅ (10) / (60 s/min) = 400 Hz
+
+
+Najizrazitejši vrh DFT -> BPF
