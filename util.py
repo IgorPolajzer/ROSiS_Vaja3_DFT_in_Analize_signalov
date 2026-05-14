@@ -9,29 +9,23 @@ def read_signal_from_m4a(input_file):
     return samples, sound.frame_rate
 
 
-def dft(signal, Fs, T, max_sample_count, max_freqs_hz):
+def dft(signal, Fs, max_sample_count, max_freqs_hz):
     signal = signal[:max_sample_count]
+    T = len(signal) / Fs # Signal length.
 
-    length = np.arange(len(signal)) # Frequency length.
+    length = np.arange(len(signal))
 
-    # All frequencies from 0 to Fs stepped by delta_F=1/T
-    # Freqency resolution 1/T
     freqs = np.arange(0, Fs, 1/T)
     freqs = freqs[freqs <= max_freqs_hz]
     result = []
 
-    # Dot product over all frequencies [0, Fs].
     for f in freqs:
         result.append(np.dot(signal, np.exp(-1j * 2 * np.pi * f * length / Fs)))
 
-    return np.array(result)
+    return np.array(result), freqs
 
 
-def plot_analasys(y, Fs, T, label):
-    N_total = int(T * Fs)
-    max_freq = (len(y) / N_total) * Fs
-    x = np.linspace(0, max_freq, len(y))
-
+def plot_analasys(y, x, label):
     plt.plot(x, abs(y), label=label)
     plt.title('Frekvenčna vsebina')
     plt.xlabel('Frekvenca [Hz]')
@@ -40,10 +34,15 @@ def plot_analasys(y, Fs, T, label):
     plt.grid(True)
     plt.show()
 
-    return max_freq
-
 
 def calculate_rpm(f_bmp, blade_count):
     rpm = (f_bmp * 60) / blade_count
     print(f"Rpm: {rpm}")
     return rpm
+
+
+def get_peak_freq(y_dft, freqs):
+    peak_idx = np.argmax(np.abs(y_dft))
+    f_blade = freqs[peak_idx]
+    print(f"Peak frequency: {f_blade:.2f} Hz")
+    return f_blade
