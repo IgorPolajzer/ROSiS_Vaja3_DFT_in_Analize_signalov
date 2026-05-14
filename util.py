@@ -9,19 +9,12 @@ def read_signal_from_m4a(input_file):
     return samples, sound.frame_rate
 
 
-def plot_frequency(A, y, p, t, Fs, freq):
-    plt.plot(t, y)
-    plt.title(f'Vzor: {Fs} Hz, Frek: {freq} Hz, Ampl: {A}, Faza: {p} rad')
-    plt.xlabel('Čas [s]')
-    plt.ylabel('Amplituda')
-    plt.grid(True)
-    plt.show()
+def dft(signal, Fs, T, max_sample_count, max_freqs_hz):
+    signal = signal[:max_sample_count]
 
-
-def dft(signal, Fs, T, max_freqs_hz):
     length = np.arange(len(signal)) # Frequency length.
 
-    # All frequencies from 0 to Fs stepped by 1/T
+    # All frequencies from 0 to Fs stepped by delta_F=1/T
     # Freqency resolution 1/T
     freqs = np.arange(0, Fs, 1/T)
     freqs = freqs[freqs <= max_freqs_hz]
